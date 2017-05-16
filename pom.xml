@@ -207,6 +207,14 @@
           </dependency>
         </dependencies>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>3.1.0</version>
+        <configuration>
+          <webappDirectory>/war</webappDirectory>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
   <reporting>

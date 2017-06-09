@@ -40,7 +40,7 @@ node {
         sh 'docker build -t petclinic_alpine .'
    }
    stage('Funktional Test'){
-      // build job: 'UFT Test'
+      build job: 'UFT Test'
    }
    stage('PerformanceTest')
     {

@@ -41,7 +41,7 @@ node {
        sh 'docker push 172.16.20.157:8082/petclinic_alpine'
    }
     
-   checkpoint 'before Create VM & Deploy App'
+   //checkpoint 'before Create VM & Deploy App'
     
    stage('Create VM & Deploy App'){
        

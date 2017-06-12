@@ -40,7 +40,9 @@ node {
        sh 'docker tag petclinic_alpine 172.16.20.157:8082/petclinic_alpine'
        sh 'docker push 172.16.20.157:8082/petclinic_alpine'
    }
-       
+    
+   checkpoint 'before Create VM & Deploy App'
+    
    stage('Create VM & Deploy App'){
        
        build job: 'oo_create_runner_vm_from_template'

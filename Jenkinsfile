@@ -57,9 +57,8 @@ node {
        data = waitForWebhook hook
        
        echo "Webhook called with data: ${data}"
-
-       
-       sh 'ssh administrator@172.16.20.159 "docker run --rm -d -p 4000:8080 172.16.20.157:8082/petclinic_alpine java -jar /usr/src/petclinic/petclinic-1.0.0.jar"'
+ 
+       sh 'ssh -o StrictHostKeyChecking=no administrator@172.16.20.116 "docker run --rm -d -p 4000:8080 172.16.20.157:8082/petclinic_alpine java -jar /usr/src/petclinic/petclinic-1.0.0.jar"'
        
        //alternatively deploy via ssh ==> does not close the pipeline atm
        

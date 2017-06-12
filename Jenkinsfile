@@ -45,12 +45,19 @@ node {
     
    stage('Create VM & Deploy App'){
        
-       build job: 'oo_create_runner_vm_from_template'
+       hook = registerWebhook()
+       
+       build job: 'oo_create_runner_vm_from_template', parameters: [[$class: 'StringParameterValue', name: 'hook_url', value: hook.getURL()]]
        
        //sh 'docker pull 172.16.20.157:8082/petclinic_alpine' 
        //sh 'docker run -d -p 4100:8080 petclinic_alpine java -jar /usr/src/petclinic/petclinic-1.0.0.jar'
+ 
+       echo "Waiting for POST to ${hook.getURL()}"
+ 
+       data = waitForWebhook hook
        
-       input id: 'Async-input', message: 'Waiting for remote system'
+       echo "Webhook called with data: ${data}"
+
        
        sh 'ssh administrator@172.16.20.159 "docker run --rm -d -p 4000:8080 172.16.20.157:8082/petclinic_alpine java -jar /usr/src/petclinic/petclinic-1.0.0.jar"'
        

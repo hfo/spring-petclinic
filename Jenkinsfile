@@ -10,10 +10,6 @@ node {
     stage('Maven-Test'){
         //sh './mvnw clean test'
     }
-    
-    stage('Cobertura'){
-        //sh './mvnw cobertura:check'
-    }
    
     stage('Maven-Build') {
         sh './mvnw clean install -Dmaven.test.skip=false'
@@ -39,21 +35,16 @@ node {
         
         sh 'docker build -t petclinic_alpine .'
    }
-   stage('Funktional Test'){
-      build job: 'UFT Test'
-   }
-   stage('PerformanceTest')
-    {
-       build job: 'LR Test Job'
-     
-    }
-   
-   stage('Nexus Upload Docker Image'){
+    
+   stage('Nexus upload Docker image'){
        sh 'docker tag petclinic_alpine 172.16.20.157:8082/petclinic_alpine'
        sh 'docker push 172.16.20.157:8082/petclinic_alpine'
    }
-   
-   stage('Deploy'){
+       
+   stage('Create VM & Deploy App'){
+       
+       build job: 'oo_create_runner_vm_from_template'
+       
        //sh 'docker pull 172.16.20.157:8082/petclinic_alpine' 
        //sh 'docker run -d -p 4100:8080 petclinic_alpine java -jar /usr/src/petclinic/petclinic-1.0.0.jar'
        
@@ -63,5 +54,19 @@ node {
        
        //sh 'ssh administrator@172.16.20.93 "rm -f petclinic-1.0.0.jar; wget http://172.16.20.92:8081/repository/Jenkins-Repo/de/proficom/cdp/petclinic/1.0.0/petclinic-1.0.0.jar; ls"'
        //sh 'ssh administrator@172.16.20.93 "nohup java -jar petclinic-1.0.0.jar &"'
-    }
+   }
+    
+   stage('Functional tests'){
+      //build job: 'UFT Test'
+   }
+    
+   stage('Performance tests')
+   {
+       //build job: 'LR Test Job'
+     
+   }
+    
+   stage('Clean up testenvironment'){
+       build job: 'oo_remove_runner_vm'    
+   }
 }

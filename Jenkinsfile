@@ -12,7 +12,7 @@ node {
     }
    
     stage('Maven-Build') {
-        sh './mvnw clean install -Dmaven.test.skip=false'
+        sh './mvnw clean install -Dmaven.test.skip=true'
     }
     
     stage('SonarQube analysis') {
@@ -48,7 +48,7 @@ node {
        //sh 'docker pull 172.16.20.157:8082/petclinic_alpine' 
        //sh 'docker run -d -p 4100:8080 petclinic_alpine java -jar /usr/src/petclinic/petclinic-1.0.0.jar'
        
-       sh 'ssh administrator@172.16.20.159 "docker run --rm -d -p 4000:8080 172.16.20.157:8082/petclinic_alpine java -jar /usr/src/petclinic/petclinic-1.0.0.jar"'
+       
        
        //alternatively deploy via ssh ==> does not close the pipeline atm
        

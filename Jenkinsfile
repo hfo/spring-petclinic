@@ -47,7 +47,11 @@ node {
        
        hook = registerWebhook()
        
-       build job: 'oo_create_runner_vm_from_template', parameters: [[$class: 'StringParameterValue', name: 'hook_url', value: hook.getURL()]]
+       vmName = 'Debian-Runner-'${BUILD_NUMBER}'-TJ'
+       
+       ip = '172.16.20.116'
+       
+       build job: 'oo_create_runner_vm_from_template', parameters: [[$class: 'StringParameterValue', name: 'hook_url', value: hook.getURL()],[$class: 'StringParameterValue', name: 'vmName', value: vmName],[$class: 'StringParameterValue', name: 'IP_new', value: ip]]
        
        //sh 'docker pull 172.16.20.157:8082/petclinic_alpine' 
        //sh 'docker run -d -p 4100:8080 petclinic_alpine java -jar /usr/src/petclinic/petclinic-1.0.0.jar'
@@ -56,7 +60,7 @@ node {
  
        data = waitForWebhook hook
        
-       echo "Webhook called with data: ${data}"
+       echo "Webhook called with data: ${data}, VM created and started successfully"
  
        sh 'ssh -o StrictHostKeyChecking=no administrator@172.16.20.116 "docker run --rm -d -p 4000:8080 172.16.20.157:8082/petclinic_alpine java -jar /usr/src/petclinic/petclinic-1.0.0.jar"'
        
@@ -77,6 +81,16 @@ node {
    }
     
    stage('Clean up testenvironment'){
-       build job: 'oo_remove_runner_vm'    
+       hook2 = registerWebhook()
+       
+
+             
+       build job: 'oo_remove_runner_vm', parameters: [[$class: 'StringParameterValue', name: 'hook_url', value: hook2.getURL()],[$class: 'StringParameterValue', name: 'vmName', value: vmName]]
+       
+       echo "Waiting for POST to ${hook2.getURL()}"
+       
+       data = waitForWebhook hook2
+       
+       echo "Webhook called with data: ${data}, VM was removed succesfully"
    }
 }

@@ -44,6 +44,8 @@ node {
    //checkpoint 'before Create VM & Deploy App'
     
    stage('Create VM & Deploy App'){
+       input id: 'Wait-for-manual-continue-0', message: 'Waiting for manual continue' 
+       
        def hook
        hook = registerWebhook()
        
@@ -71,6 +73,8 @@ node {
        
        //sh 'ssh administrator@172.16.20.93 "rm -f petclinic-1.0.0.jar; wget http://172.16.20.92:8081/repository/Jenkins-Repo/de/proficom/cdp/petclinic/1.0.0/petclinic-1.0.0.jar; ls"'
        //sh 'ssh administrator@172.16.20.93 "nohup java -jar petclinic-1.0.0.jar &"'
+       
+       input id: 'Wait-for-manual-continue-1', message: 'Waiting for manual continue' 
    }
     
    stage('Functional tests'){
@@ -84,6 +88,8 @@ node {
    }
     
    stage('Clean up testenvironment'){
+       input id: 'Wait-for-manual-continue-2', message: 'Waiting for manual continue' 
+       
        def hook2
        hook2 = registerWebhook()
    
@@ -94,6 +100,6 @@ node {
        def data2
        data2 = waitForWebhook hook2
        
-       echo "Webhook called with data: ${data}, VM was removed succesfully"
+       echo "Webhook called with data: ${data2}, VM was removed succesfully"
    }
 }

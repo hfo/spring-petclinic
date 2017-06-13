@@ -44,11 +44,13 @@ node {
    //checkpoint 'before Create VM & Deploy App'
     
    stage('Create VM & Deploy App'){
-       
+       def hook
        hook = registerWebhook()
        
+       def vmName
        vmName = 'Debian-Runner-'${BUILD_NUMBER}'-TJ'
        
+       def ip
        ip = '172.16.20.116'
        
        build job: 'oo_create_runner_vm_from_template', parameters: [[$class: 'StringParameterValue', name: 'hook_url', value: hook.getURL()],[$class: 'StringParameterValue', name: 'vmName', value: vmName],[$class: 'StringParameterValue', name: 'IP_new', value: ip]]
@@ -57,7 +59,8 @@ node {
        //sh 'docker run -d -p 4100:8080 petclinic_alpine java -jar /usr/src/petclinic/petclinic-1.0.0.jar'
  
        echo "Waiting for POST to ${hook.getURL()}"
- 
+       
+       def data
        data = waitForWebhook hook
        
        echo "Webhook called with data: ${data}, VM created and started successfully"
@@ -81,15 +84,15 @@ node {
    }
     
    stage('Clean up testenvironment'){
+       def hook2
        hook2 = registerWebhook()
-       
-
-             
+   
        build job: 'oo_remove_runner_vm', parameters: [[$class: 'StringParameterValue', name: 'hook_url', value: hook2.getURL()],[$class: 'StringParameterValue', name: 'vmName', value: vmName]]
        
        echo "Waiting for POST to ${hook2.getURL()}"
        
-       data = waitForWebhook hook2
+       def data2
+       data2 = waitForWebhook hook2
        
        echo "Webhook called with data: ${data}, VM was removed succesfully"
    }

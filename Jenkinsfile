@@ -9,29 +9,20 @@ node {
     def ip
     ip = "172.16.20.116"
     
-    stage('GIT') { 
+    stage('Preparation') { 
         git url:'https://github.com/hfo/spring-petclinic.git'
     }
     
-    stage('Maven-Test'){
-        //sh './mvnw clean test'
-    }
-   
-    stage('Maven-Build') {
+    stage('Build&Upload Maven Artifact(jar)') {
         sh './mvnw clean install -Dmaven.test.skip=true'
-    }
-    
-    stage('SonarQube analysis') {
+
         sh "./mvnw sonar:sonar -Dsonar.host.url=http://172.16.20.157:9000"
-        //${mvnHome}/bin/mvn
-    }
-    
-    stage('Nexus Upload Artifact'){
+        
         build job: 'nexus_uploader_job'
     }
     
     
-    stage('Dockerize'){
+    stage('Build&Upload Docker Image'){
         
         sh 'rm -f Dockerfile'
         sh 'rm -f petclinic-1.0.0.jar'
@@ -40,9 +31,7 @@ node {
         sh'wget http://172.16.20.157:8081/repository/Jenkins-Repo/de/proficom/cdp/petclinic/1.0.0/petclinic-1.0.0.jar'
         
         sh 'docker build -t petclinic_alpine .'
-   }
-    
-   stage('Nexus upload Docker image'){
+
        sh 'docker tag petclinic_alpine 172.16.20.157:8082/petclinic_alpine'
        sh 'docker push 172.16.20.157:8082/petclinic_alpine'
    }

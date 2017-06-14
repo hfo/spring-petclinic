@@ -50,7 +50,7 @@ node {
        hook = registerWebhook()
        
        def vmName
-       vmName = 'Debian-Runner-'${BUILD_NUMBER}'-TJ'
+       vmName = 'Debian-Runner-'"${BUILD_NUMBER}"'-TJ'
        
        def ip
        ip = '172.16.20.116'

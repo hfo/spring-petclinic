@@ -3,6 +3,12 @@ node {
     mvnHome = tool 'mvn'
     env.PATH = "${mvnHome}/bin:${env.PATH}"
     
+    def vmName
+    vmName = "Debian-Runner-${BUILD_NUMBER}-TJ"
+       
+    def ip
+    ip = "172.16.20.116"
+    
     stage('GIT') { 
         git url:'https://github.com/hfo/spring-petclinic.git'
     }
@@ -49,13 +55,6 @@ node {
        def hook
        hook = registerWebhook()
        
-       def vmName
-       vmName = "Debian-Runner-${BUILD_NUMBER}-TJ"
-       
-       def ip
-       ip = "172.16.20.116"
-       
-       
        build job: 'oo_create_runner_vm_from_template', parameters: [[$class: 'StringParameterValue', name: 'hook_url', value: hook.getURL()],[$class: 'StringParameterValue', name: 'vmName', value: vmName],[$class: 'StringParameterValue', name: 'IP_new', value: ip],[$class: 'StringParameterValue', name: 'pipelineBuildNumber', value: ${BUILD_NUMBER}]]
        
        //sh 'docker pull 172.16.20.157:8082/petclinic_alpine' 
@@ -82,9 +81,8 @@ node {
       //build job: 'UFT Test'
    }
     
-   stage('Performance tests')
-   {
-       //build job: 'LR Test Job'
+   stage('Performance tests'){
+       build job: 'LR_Test_Job_2'
      
    }
     

@@ -50,10 +50,10 @@ node {
        hook = registerWebhook()
        
        def vmName
-       vmName = 'Debian-Runner-'"${BUILD_NUMBER}"'-TJ'
+       vmName = "Debian-Runner-${BUILD_NUMBER}-TJ"
        
        def ip
-       ip = '172.16.20.116'
+       ip = "172.16.20.116"
        
        build job: 'oo_create_runner_vm_from_template', parameters: [[$class: 'StringParameterValue', name: 'hook_url', value: hook.getURL()],[$class: 'StringParameterValue', name: 'vmName', value: vmName],[$class: 'StringParameterValue', name: 'IP_new', value: ip]]
        

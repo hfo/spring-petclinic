@@ -56,7 +56,7 @@ node {
        
        echo "Webhook called with data: ${data}, VM created and started successfully"
  
-       build job: 'deployPetclinicDockerSSH'
+       build job: 'deployPetclinicDockerSSH', parameters: [[$class: 'StringParameterValue', name: 'ip', value: ip]]
        
        //sh "ssh -o StrictHostKeyChecking=no administrator@${ip} 'docker run --rm -d -p 4000:8080 172.16.20.157:8082/petclinic_alpine java -jar /usr/src/petclinic/petclinic-1.0.0.jar'"
        

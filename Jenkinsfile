@@ -90,6 +90,11 @@ node {
        def data2
        data2 = waitForWebhook hook2
        
+       def str
+       str = data2.split('-')
+       
+       echo str[0]
+       
 //       def (message2, status2) = data2.tokenize(',')
 //       def (message_name2, message_content2) = message2.tokenize(',')
 //       def (status_name2, status_content2) = status2.tokenize(',')

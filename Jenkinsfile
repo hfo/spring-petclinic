@@ -94,11 +94,11 @@ node {
 //       def (message_name2, message_content2) = message2.tokenize(',')
 //       def (status_name2, status_content2) = status2.tokenize(',')
        
-//       if(status == 'success') { 
-//           echo "Webhook was called, VM was removed succesfully. Message: ${message_content2}"
-//       }else{
-//           echo "Webhook was called, VM was removed NOT succesfully. Message: ${message_content2}"
-//       }
+       if("success" == "success") { 
+           echo "Webhook was called, VM was removed succesfully. Message: ${message_content2}"
+       }else{
+           echo "Webhook was called, VM was removed NOT succesfully. Message: ${message_content2}"
+       }
 
    }
 }

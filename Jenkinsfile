@@ -90,9 +90,9 @@ node {
        def data2
        data2 = waitForWebhook hook2
        
-       def (message2, status2) = data2.tokenize(',')
-       def (message_name2, message_content2) = message2.tokenize(',')
-       def (status_name2, status_content2) = status2.tokenize(',')
+//       def (message2, status2) = data2.tokenize(',')
+//       def (message_name2, message_content2) = message2.tokenize(',')
+//       def (status_name2, status_content2) = status2.tokenize(',')
        
 //       if(status == 'success') { 
 //           echo "Webhook was called, VM was removed succesfully. Message: ${message_content2}"

@@ -56,7 +56,7 @@ node {
        
        echo "Webhook called with data: ${data}, VM created and started successfully"
  
-       sh 'ssh -o StrictHostKeyChecking=no administrator@172.16.20.116 "docker run --rm -d -p 4000:8080 172.16.20.157:8082/petclinic_alpine java -jar /usr/src/petclinic/petclinic-1.0.0.jar"'
+       //sh 'ssh -o StrictHostKeyChecking=no administrator@172.16.20.116 "docker run --rm -d -p 4000:8080 172.16.20.157:8082/petclinic_alpine java -jar /usr/src/petclinic/petclinic-1.0.0.jar"'
        
        //alternatively deploy via ssh ==> does not close the pipeline atm
        
@@ -71,7 +71,7 @@ node {
    }
     
    stage('Performance tests'){
-       build job: 'LR_Test_Job_2'
+       //build job: 'LR_Test_Job_2'
      
    }
     

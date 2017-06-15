@@ -56,7 +56,9 @@ node {
        
        echo "Webhook called with data: ${data}, VM created and started successfully"
  
-       sh "ssh -o StrictHostKeyChecking=no administrator@${ip} 'docker run --rm -d -p 4000:8080 172.16.20.157:8082/petclinic_alpine java -jar /usr/src/petclinic/petclinic-1.0.0.jar'"
+       build job: 'deployPetclinicDockerSSH'
+       
+       //sh "ssh -o StrictHostKeyChecking=no administrator@${ip} 'docker run --rm -d -p 4000:8080 172.16.20.157:8082/petclinic_alpine java -jar /usr/src/petclinic/petclinic-1.0.0.jar'"
        
        //alternatively deploy via ssh ==> does not close the pipeline atm
        
@@ -88,6 +90,16 @@ node {
        def data2
        data2 = waitForWebhook hook2
        
-       echo "Webhook called with data: ${data2}, VM was removed succesfully"
+       def (message2, status2) = data2.tokenize(',')
+       def (message_name2, message_content2) = message2.tokenize(',')
+       def (status_name2, status_content2) = status2.tokenize(',')
+       
+       if(status == 'success') { 
+           echo "Webhook was called, VM was removed succesfully. Message: ${message_content2}"
+       }else{
+           echo "Webhook was called, VM was removed NOT succesfully. Message: ${message_content2}"
+       }
+       
+       
    }
 }

@@ -91,18 +91,18 @@ node {
        data2 = waitForWebhook hook2
        
        def str
-       str = data2.split('-')
+       str = data2.split(',')
        
-       echo str[0]
+       def messageStr
+       messageStr = str[0].split('=')
        
-//       def (message2, status2) = data2.tokenize(',')
-//       def (message_name2, message_content2) = message2.tokenize(',')
-//       def (status_name2, status_content2) = status2.tokenize(',')
-       
-       if("success" == "success") { 
-           echo "Webhook was called, VM was removed succesfully. Message: ${message_content2}"
+       def statusStr
+       statusStr = str[1].split('=')
+      
+       if( statusStr[1].equals("success")) { 
+           echo "Webhook was called, VM was removed succesfully. Message: ${messageStr[1]}"
        }else{
-           echo "Webhook was called, VM was removed NOT succesfully. Message: ${message_content2}"
+           echo "Webhook was called, VM was removed NOT succesfully. Message: ${messageStr[1]}"
        }
 
    }

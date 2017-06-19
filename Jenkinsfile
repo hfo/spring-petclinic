@@ -93,12 +93,18 @@ node {
        def str
        str = data2.split(',')
        
+       echo "split 1 ,"
+       
        def messageStr
        messageStr = str[0].split('=')
+       
+       echo "split 2 ="
        
        def statusStr
        statusStr = str[1].split('=')
       
+       echo "split 3 ="
+       
        if( statusStr[1].equals("success")) { 
            echo "Webhook was called, VM was removed succesfully. Message: ${messageStr[1]}"
        }else{

@@ -7,7 +7,7 @@ node {
     vmName = "Debian-Runner-${BUILD_NUMBER}-TJ"
        
     def ip
-    ip = "172.16.20.116"
+    ip = "172.16.20.92"
     
     stage('Preparation') { 
         git url:'https://github.com/hfo/spring-petclinic.git'

@@ -91,9 +91,9 @@ node {
        data2 = waitForWebhook hook2
        
        def str
-       str = data2.split(',')
+       str = data2.split('&')
        
-       echo "split 1 ,"
+       echo "split 1 &"
        
        def messageStr
        messageStr = str[0].split('=')

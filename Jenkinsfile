@@ -54,13 +54,51 @@ node {
        def data
        data = waitForWebhook hook
        
-       echo "Webhook called with data: ${data}, VM created and started successfully"
- 
-       build job: 'deployPetclinicDockerSSH', parameters: [[$class: 'StringParameterValue', name: 'ip', value: ip]]
+       def str
+       str = data.split('&')
        
-       //sh "ssh -o StrictHostKeyChecking=no administrator@${ip} 'docker run --rm -d -p 4000:8080 172.16.20.157:8082/petclinic_alpine java -jar /usr/src/petclinic/petclinic-1.0.0.jar'"
+       def messageStr
+       messageStr = str[0].split('=')
        
-       //alternatively deploy via ssh ==> does not close the pipeline atm
+       def statusStr
+       statusStr = str[1].split('=')
+       
+       if( statusStr[1].equals("success")) { 
+           echo "Webhook was called, VM was removed succesfully. Message: ${messageStr[1]}"
+           
+           build job: 'deployPetclinicDockerSSH', parameters: [[$class: 'StringParameterValue', name: 'ip', value: ip]]
+       }else{
+           echo "Webhook was called, VM was removed NOT succesfully. Message: ${messageStr[1]}"
+           
+           def hook3
+           hook3 = registerWebhook()
+
+           build job: 'oo_remove_runner_vm', parameters: [[$class: 'StringParameterValue', name: 'hook_url', value: hook3.getURL()],[$class: 'StringParameterValue', name: 'vmName', value: vmName],[$class: 'StringParameterValue', name: 'pipelineBuildNumber', value: BUILD_NUMBER]]
+
+           echo "Waiting for POST to ${hook3.getURL()}"
+
+           def data3
+           data3 = waitForWebhook hook3
+
+           def str3
+           str3 = data3.split('&')
+
+           def messageStr3
+           messageStr3 = str3[0].split('=')
+
+           def statusStr3
+           statusStr3 = str3[1].split('=')
+
+           if( statusStr3[1].equals("success")) { 
+               echo "Webhook was called, VM was removed succesfully. Message: ${messageStr3[1]}"
+               //quit the pipleine forcefully as the parent step failed
+               sh "exit 1"
+           }else{
+               echo "Webhook was called, VM was removed NOT succesfully. Message: ${messageStr3[1]}. The VM might NOT have been removed from system!"
+               //quit the pipleine forcefully as this step and the parent step failed
+               sh "exit 1"
+           }
+       }
        
        //sh 'ssh administrator@172.16.20.93 "rm -f petclinic-1.0.0.jar; wget http://172.16.20.92:8081/repository/Jenkins-Repo/de/proficom/cdp/petclinic/1.0.0/petclinic-1.0.0.jar; ls"'
        //sh 'ssh administrator@172.16.20.93 "nohup java -jar petclinic-1.0.0.jar &"'
@@ -90,19 +128,19 @@ node {
        def data2
        data2 = waitForWebhook hook2
        
-       def str
-       str = data2.split('&')
+       def str2
+       str2 = data2.split('&')
        
-       def messageStr
-       messageStr = str[0].split('=')
+       def messageStr2
+       messageStr2 = str2[0].split('=')
        
-       def statusStr
-       statusStr = str[1].split('=')
+       def statusStr2
+       statusStr2 = str2[1].split('=')
        
-       if( statusStr[1].equals("success")) { 
-           echo "Webhook was called, VM was removed succesfully. Message: ${messageStr[1]}"
+       if( statusStr2[1].equals("success")) { 
+           echo "Webhook was called, VM was removed succesfully. Message: ${messageStr2[1]}"
        }else{
-           echo "Webhook was called, VM was removed NOT succesfully. Message: ${messageStr[1]}"
+           echo "Webhook was called, VM was removed NOT succesfully. Message: ${messageStr2[1]}"
        }
 
    }

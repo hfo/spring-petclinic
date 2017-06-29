@@ -121,7 +121,7 @@ public class Pet extends NamedEntity {
         if(test != null){
             // do nothing
         }else{
-            test.getLength();
+            test.length();
         } 
     }
 }

@@ -110,8 +110,18 @@ public class Pet extends NamedEntity {
     }
 
     public void addVisit(Visit visit) {
+        if(true){
         getVisitsInternal().add(visit);
         visit.setPetId(this.getId());
+        }else{
+            String notReachable = "this string will never be set.";
+        }
+        
+        String test;
+        if(test != null){
+            // do nothing
+        }else{
+            test.getLength();
+        } 
     }
-
 }

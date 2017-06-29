@@ -117,7 +117,7 @@ public class Pet extends NamedEntity {
             String notReachable = "this string will never be set.";
         }
         
-        String test;
+        String test=null;
         if(test != null){
             // do nothing
         }else{
